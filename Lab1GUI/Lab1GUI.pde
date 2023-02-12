@@ -12,7 +12,7 @@ float confidence;
 float restingRate = 0.0;
 
 void setup() {
-  
+  fullScreen();
   /*
   for(int i = 0; i < Serial.list().length; i++)
   {

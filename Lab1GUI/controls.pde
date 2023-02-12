@@ -13,3 +13,8 @@ void keyPressed() {
       break;
   }
 }
+
+void mousePressed()
+{
+  
+}
