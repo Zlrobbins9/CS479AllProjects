@@ -6,10 +6,12 @@ Serial myPort;
 
 String tab = "intro";
 
-float heartRate;
+float heartRate = -99;
+float RHRAvg = -99;
 float bloodOxygen;
 float confidence;
 float restingRate = 0.0;
+ArrayList<Float> restingRateList = new ArrayList<Float>(0);
 
 void setup() {
   fullScreen();
@@ -30,12 +32,12 @@ void setup() {
 }
 
 void draw() {
+  //println(tab);
   if (tab == "intro"){
     intro_draw();
-    
-  
   }else if (tab == "high_low"){
     //high_low_draw();
+    
    
     pushStyle();
     background(200);
@@ -49,6 +51,9 @@ void draw() {
     
   }else if (tab == "graph"){
     graph_draw();
+  }else if(tab == "rest")
+  {
+    rest_draw();
   }
 }
 void serialEvent(Serial myPort) {
