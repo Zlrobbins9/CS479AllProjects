@@ -37,8 +37,6 @@ void draw() {
     intro_draw();
   }else if (tab == "high_low"){
     //high_low_draw();
-    
-   
     pushStyle();
     background(200);
     textSize(30);

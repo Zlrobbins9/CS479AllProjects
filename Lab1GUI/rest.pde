@@ -1,29 +1,23 @@
 void rest_draw()
 {
-  println("why do I not run");
   background(0, 0, 200);
   fill(255);
   textSize(45);
   textAlign(CENTER, CENTER);
   
-  text("aaaaaaaaaaaaaaaaaaaaaaaaa.", width/2, height/2);
-  text("Press L when youre ready", width/2, 8*height/15);
+  text("Thank you for your patience. Your reasting heart rate is: " + RHRAvg, width/2, height/2);
+  text("Press r to go to the relaxation GUI", width/2, 9*height/16);
+  text("Press g to go to the workout GUI", width/2, 10*height/16);
+  
 }
 
-/*void TakeRest()
+void TakeRest()
 {
-  while(heartRate == -99)
-  {
-    //println("waiting for input...");
-    pushStyle();
-  background(0, 0, 0);
+  background(0);
   fill(255);
   textSize(45);
   textAlign(CENTER, CENTER);
-    text("no input detected, please place your finger on the sensor...", width/2, height/2);
-    popStyle();
-  }
-    print("Starting recording of resting HR...");
+    text("scanning...", width/2, height/2);
     for(int i = 0; i < 30; i++)
     {
       println(i + " seconds have passed...");
@@ -38,7 +32,6 @@ void rest_draw()
       println(restingRateList.get(i));
       HRSum += restingRateList.get(i);
     }
-    float RHRAvg = HRSum/30.0;
+    RHRAvg = HRSum/30.0;
     println("your average resting HR is..." + RHRAvg);
 }
-*/

@@ -13,12 +13,14 @@ void keyPressed() {
       break;
       
      case 'l':
-     if(RHRAvg == -99)
+     if(RHRAvg == -99 && heartRate != -99)
      {
      tab = "rest";
+     if(RHRAvg == -99)
+     {
      TakeRest();
      }
-     
+     }
      break;
   }
 }
