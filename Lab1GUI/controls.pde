@@ -4,7 +4,7 @@ void keyPressed() {
       tab = "intro";
       break;
       
-    case 's':
+    case 'w':
       tab = "graph";
       break;
       

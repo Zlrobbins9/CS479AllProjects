@@ -6,8 +6,8 @@ Serial myPort;
 
 String tab = "intro";
 
-float heartRate = -99;
-float RHRAvg = -99;
+float heartRate = 99;
+float RHRAvg = 99;
 float bloodOxygen;
 float confidence;
 float restingRate = 0.0;
@@ -67,7 +67,7 @@ void serialEvent(Serial myPort) {
     tempVal = trim(tempVal);
     float val = float(tempVal);
     high_low_serialEvent(val);
-    graph_serialEvent(val);
+    graph_serialEvent(heartRate);
    println(heartRate);
   }
 }
