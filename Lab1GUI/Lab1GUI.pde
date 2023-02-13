@@ -6,20 +6,22 @@ Serial myPort;
 
 String tab = "intro";
 
-float heartRate;
+float heartRate = -99;
+float RHRAvg = -99;
 float bloodOxygen;
 float confidence;
 float restingRate = 0.0;
+ArrayList<Float> restingRateList = new ArrayList<Float>(0);
 
 void setup() {
+  fullScreen();
   
-  /*
-  for(int i = 0; i < Serial.list().length; i++)
-  {
-    println(Serial.list()[i]);
-  }
-  */
-  String portName = "COM5"; //changer 
+  //for(int i = 0; i < Serial.list().length; i++)
+  //{
+  //  println(Serial.list()[i]);
+  //}
+  
+  String portName = Serial.list()[2]; //changer 
   myPort = new Serial(this, portName, 115200);
   myPort.bufferUntil('\n');
   
@@ -30,13 +32,11 @@ void setup() {
 }
 
 void draw() {
+  //println(tab);
   if (tab == "intro"){
     intro_draw();
-    
-  
   }else if (tab == "high_low"){
     //high_low_draw();
-   
     pushStyle();
     background(200);
     textSize(30);
@@ -49,6 +49,12 @@ void draw() {
     
   }else if (tab == "graph"){
     graph_draw();
+  }else if(tab == "rest")
+  {
+    rest_draw();
+  }
+  else if(tab == "relax"){
+    relax_draw();
   }
 }
 void serialEvent(Serial myPort) {
