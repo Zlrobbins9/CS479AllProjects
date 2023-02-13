@@ -3,6 +3,7 @@ FloatList lineChartX;
 FloatList lineChartY;
 
 int count;
+int age = 18;
 
 void graph_setup() {
   lineChart = new XYChart(this);
@@ -37,6 +38,13 @@ void graph_draw() {
   
   textSize(40);
   text("User's Heart Beat", width/2, 57*height/100);
+  fill(255);
+  rect(width/2, 11*height/16, width/10, height/10);
+  rect(width/2, 27*height/32, width/10, height/10);
+  fill(0);
+  text("current age:" + age, width/2, 3*height/4);
+  text("age up", width/2, 11*height/16);
+  text("age down", width/2, 27*height/32);
 }
 
 void graph_serialEvent(float val) {

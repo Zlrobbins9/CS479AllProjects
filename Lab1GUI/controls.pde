@@ -31,5 +31,14 @@ void keyPressed() {
 
 void mousePressed()
 {
-  
+  if(tab == "graph" && mouseX >= width/2-width/20 && mouseX <= width/2+width/20 )
+  {
+    if(mouseY >= 11*height/16-height/20 && mouseY <= 11*height/16+height/20)
+    {
+      println("top button pressed!");
+    }else if(mouseY >= 27*height/32-height/20 && mouseY <= 27*height/32+height/20)
+    {
+      
+    }
+  }
 }

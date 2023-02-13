@@ -7,7 +7,7 @@ void rest_draw()
   
   text("Thank you for your patience. Your reasting heart rate is: " + RHRAvg, width/2, height/2);
   text("Press r to go to the relaxation GUI", width/2, 9*height/16);
-  text("Press g to go to the workout GUI", width/2, 10*height/16);
+  text("Press w to go to the workout GUI", width/2, 10*height/16);
   
 }
 

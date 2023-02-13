@@ -6,8 +6,9 @@ Serial myPort;
 
 String tab = "intro";
 
-float heartRate = 99;
-float RHRAvg = 99;
+boolean stressed = false;
+float heartRate = -99;
+float RHRAvg = -99;
 float bloodOxygen;
 float confidence;
 float restingRate = 0.0;

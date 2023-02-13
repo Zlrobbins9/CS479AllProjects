@@ -8,6 +8,8 @@
 // Reset pin, MFIO pin
 const int resPin = 4;
 const int mfioPin = 5;
+const int buzz = 12;
+int val = 0;
 
 // Takes address, reset pin, and MFIO pin.
 SparkFun_Bio_Sensor_Hub bioHub(resPin, mfioPin); 
@@ -20,6 +22,7 @@ void setup(){
 
   Wire.begin();
   int result = bioHub.begin();
+  pinMode(buzz,OUTPUT);
   /*
   if (!result)
     Serial.println("Sensor started!");
@@ -47,7 +50,6 @@ void setup(){
 }
 
 void loop(){
-
     // Information from the readBpm function will be saved to our "body"
     // variable.  
     body = bioHub.readBpm();
@@ -59,4 +61,21 @@ void loop(){
       Serial.println(body.confidence);
       delay(250); // Slowing it down, we don't need to break our necks here.
     }
+    
+    if(Serial.available()){
+        val = Serial.read();
+      }
+      if(val == '1'){
+        digitalWrite(buzz,HIGH);
+        delay(100);
+        digitalWrite(buzz,LOW);
+        delay(100);
+        digitalWrite(buzz,HIGH);
+        delay(100);
+        digitalWrite(buzz,LOW); 
+        }
+        else{
+          digitalWrite(buzz,LOW); 
+          }
+    
 }
