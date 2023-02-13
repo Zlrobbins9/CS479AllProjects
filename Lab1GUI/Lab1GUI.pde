@@ -11,6 +11,7 @@ float RHRAvg = -99;
 float bloodOxygen;
 float confidence;
 float restingRate = 0.0;
+ArrayList<Float> restingRateList = new ArrayList<Float>(0);
 
 
 void setup() {
@@ -21,7 +22,7 @@ void setup() {
     println(Serial.list()[i]);
   }
   */
-  String portName = "COM5"; //changer 
+  String portName = "COM5"; //changer
   myPort = new Serial(this, portName, 115200);
   myPort.bufferUntil('\n');
   
@@ -49,9 +50,10 @@ void draw() {
     
   }else if (tab == "graph"){
     graph_draw();
-  }else if(tab == "rest")
-  {
+  }else if(tab == "rest"){
     rest_draw();
+  }else if(tab == "relax"){
+    relax_draw();
   }
 }
 void serialEvent(Serial myPort) {
