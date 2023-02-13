@@ -11,7 +11,7 @@ float RHRAvg = -99;
 float bloodOxygen;
 float confidence;
 float restingRate = 0.0;
-ArrayList<Float> restingRateList = new ArrayList<Float>(0);
+
 
 void setup() {
   fullScreen();

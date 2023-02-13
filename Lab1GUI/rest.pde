@@ -13,11 +13,7 @@ void rest_draw()
 
 void TakeRest()
 {
-  background(0);
-  fill(255);
-  textSize(45);
-  textAlign(CENTER, CENTER);
-    text("scanning...", width/2, height/2);
+  ArrayList<Float> restingRateList = new ArrayList<Float>(0);
     for(int i = 0; i < 30; i++)
     {
       println(i + " seconds have passed...");
