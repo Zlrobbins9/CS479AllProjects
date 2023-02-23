@@ -5,6 +5,10 @@
 // No other Address options.
 #define DEF_ADDR 0x55
 
+
+
+
+
 // Reset pin, MFIO pin
 const int resPin = 4;
 const int mfioPin = 5;
@@ -79,3 +83,5 @@ void loop(){
           }
     
 }
+
+*/

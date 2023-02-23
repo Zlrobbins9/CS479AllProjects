@@ -2,7 +2,7 @@ import org.gicentre.utils.stat.*;
 import processing.serial.*;
 
 
-Serial myPort;
+Serial myPort; // The serial port
 
 String tab = "intro";
 
@@ -18,14 +18,15 @@ ArrayList<Float> restingRateList = new ArrayList<Float>(0);
 void setup() {
   fullScreen();
   /*
+  // List all the available serial ports
   for(int i = 0; i < Serial.list().length; i++)
   {
     println(Serial.list()[i]);
   }
   */
   String portName = "COM5"; //changer
-  myPort = new Serial(this, portName, 115200);
-  myPort.bufferUntil('\n');
+  myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
+  myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
   
   size(500, 200);
   
@@ -57,6 +58,44 @@ void draw() {
     relax_draw();
   }
 }
+
+void serialEvent (Serial myPort) 
+{
+  // get the ASCII string:
+  String inString = myPort.readStringUntil('\n');
+
+  if (inString != null) 
+  {
+    // trim off any whitespace:
+    inString = trim(inString);
+
+    // If leads off detection is true notify with blue line
+    if (inString.equals("!")) 
+    { 
+      stroke(0, 0, 0xff); //Set stroke to blue ( R, G, B)
+      inByte = 512;  // middle of the ADC range (Flat Line)
+    }
+    // If the data is good let it through
+    else 
+    {
+      stroke(0xff, 0, 0); //Set stroke to red ( R, G, B)
+      inByte = float(inString); 
+      
+      // BPM calculation check
+      if (inByte > threshold && belowThreshold == true)
+      {
+        calculateBPM();
+        belowThreshold = false;
+      }
+      else if(inByte < threshold)
+      {
+        belowThreshold = true;
+      }
+    }
+  }
+}
+/*
+//old serialevent code
 void serialEvent(Serial myPort) {
   String tempVal = myPort.readStringUntil('\n');
   String inputs[] = split(tempVal, ", ");
@@ -71,4 +110,4 @@ void serialEvent(Serial myPort) {
     graph_serialEvent(heartRate);
    println(heartRate);
   }
-}
+}*/
