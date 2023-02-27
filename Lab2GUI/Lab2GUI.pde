@@ -7,12 +7,17 @@ Serial myPort; // The serial port
 String tab = "intro";
 
 boolean stressed = false;
-float heartRate = -99;
+float heartRate = 100;
 float RHRAvg = -99;
 float bloodOxygen;
 float confidence;
 float restingRate = 0.0;
 ArrayList<Float> restingRateList = new ArrayList<Float>(0);
+float curPressure;
+float prevPressure;
+boolean isFakeBreathing = false;
+int exhaleMode = 5;
+float pressureFloor = 1500; //tracks the lowest pressure recorded, set to 1500 because the device's maximum input is 1000.
 
 
 void setup() {
@@ -24,18 +29,38 @@ void setup() {
     println(Serial.list()[i]);
   }
   */
+  /*
   String portName = "COM5"; //changer
   myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
   myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
+  */
   
-  size(500, 200);
-  
-  high_low_setup();
   graph_setup();
+  curPressure = 150;
 }
 
 void draw() {
   //println(tab);
+  prevPressure = curPressure;
+  //curPressure = floor(100*sin(tempCounter/60.0)+250);
+  if(isFakeBreathing)
+  {
+    curPressure+=5;
+  }else if(curPressure >= 150)
+  {
+    curPressure-=exhaleMode;
+  }
+  if(curPressure <= pressureFloor && curPressure > 10) //record a lowest value if its not a blatant misread
+  {
+    pressureFloor = curPressure;
+  }
+  //println("current pressure is: " + curPressure);
+  
+  heartRate = random(99, 102);
+  if(millis() % 10 == 0)
+  {
+    graph_serialEvent(heartRate);
+  }
   if (tab == "intro"){
     intro_draw();
   }else if (tab == "high_low"){
@@ -56,11 +81,18 @@ void draw() {
     rest_draw();
   }else if(tab == "relax"){
     relax_draw();
+  }else if(tab == "meditation"){
+    meditation_draw();
+  }else if(tab == "bird"){
+    bird_draw();
+  }else if(tab == "loser"){
+     loser_draw(); 
   }
 }
 
 void serialEvent (Serial myPort) 
 {
+  
   // get the ASCII string:
   String inString = myPort.readStringUntil('\n');
 

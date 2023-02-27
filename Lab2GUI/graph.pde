@@ -4,8 +4,14 @@ FloatList lineChartY;
 
 int count;
 int age = 18;
+int startTier = 1;
+ArrayList<workoutData> workoutTiers = new ArrayList<workoutData>(0);
 
 void graph_setup() {
+  for(int i=0; i<5; i++)
+  {
+    workoutTiers.add(new workoutData(i));
+  }
   lineChart = new XYChart(this);
   lineChartX = new FloatList();
   lineChartY = new FloatList();
@@ -41,24 +47,25 @@ void graph_draw() {
   text("Current BPM: " + heartRate, width/2, 11*height/16);
   text("Time between beats: " + heartRate/60 + " seconds", width/2,3*height/4);
   text("Words of motivation:", width/2, 26*height/32);
-  
-  if(heartRate > (220-age)*0.9)
+  text("Breath Value:" + curPressure, width/2, 30*height/32);
+  int swwitch = GetCurrentTier();
+  if(swwitch == 4)
   {
     fill(115, 25, 22);
     text("We are not responsible for your imminent collapse", width/2, 28*height/32);
-  }else if(heartRate <= (220-age)*0.9 && heartRate > (220-age)*0.8)
+  }else if(swwitch == 3)
   {
     fill(161, 100, 21);
     text("Keep it up, but be sure to pace yourself!", width/2, 28*height/32);
-  }else if(heartRate <= (220-age)*0.8 && heartRate > (220-age)*0.7)
+  }else if(swwitch == 2)
   {
     fill(145, 128, 0);
     text("This is a good place to be, good job!", width/2, 28*height/32);
-  }else if(heartRate <= (220-age)*0.7 && heartRate > (220-age)*0.6)
+  }else if(swwitch == 1)
   {
     fill(6, 107, 15);
     text("Great start, but I bet you can go further!", width/2, 28*height/32);
-  }else if(heartRate <= (220-age)*0.6 && heartRate > 0)
+  }else if(swwitch == 0)
   {
     fill(2, 11, 181);
     text("You are gonna have to try a lot harder than THAT.", width/2, 28*height/32);
@@ -115,4 +122,50 @@ void graph_serialEvent(float val) {
   }
   
   lineChart.setData(lineChartX.array(), lineChartY.array());
+}
+
+int GetCurrentTier()
+{
+  if(heartRate > (220-age)*0.9)
+  {
+    return 4;
+  }else if(heartRate <= (220-age)*0.9 && heartRate > (220-age)*0.8)
+  {
+    return 3;
+  }else if(heartRate <= (220-age)*0.8 && heartRate > (220-age)*0.7)
+  {
+    return 2;
+  }else if(heartRate <= (220-age)*0.7 && heartRate > (220-age)*0.6)
+  {
+    return 1;
+  }else if(heartRate <= (220-age)*0.6 && heartRate > 0)
+  {
+    return 0;
+  }else
+  {
+    return -1;
+  }
+  
+  
+}
+
+
+class workoutData
+{
+  int tier; // shows what tier of the workout it is
+  float inhaleTime, exhaleTime; // record how long you inhale and exhale for this
+  float timeSpent; 
+  
+  workoutData(int _tier)
+  {
+    tier = _tier;
+    inhaleTime = -99;
+    exhaleTime = -99;
+  }
+  
+  void SetBreathingRates(float newinhale, float newexhale)
+  {
+    inhaleTime = newinhale;
+    exhaleTime = newexhale;
+  }
 }
