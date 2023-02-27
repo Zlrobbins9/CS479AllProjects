@@ -94,20 +94,10 @@ void DrawGraph()
   textSize(40);
   fill(150);
   text("User's Heart Beat", width/2, 57*height/100);
-  
-  rectMode(CORNER);
-  fill(255,20,20,125);
-  rect(26*width/100,height/100,width/2, height/10);
-  fill(245, 157, 49,125);
-  rect(26*width/100,height/100 + height/10,width/2, height/10);
-  fill(247, 202, 37,125);
-  rect(26*width/100,height/100+ height/5,width/2, height/10);
-  fill(76, 210, 40,125);
-  rect(26*width/100,height/100+ 3*height/10,width/2, height/10);
-  fill(40, 82, 210,125);
-  rect(26*width/100,height/100+ 2*height/5,width/2, height/15);
-  
-  
+  for(int i = 0; i < workoutTiers.size(); i++)
+  {
+    workoutTiers.get(i).TierDraw();
+  }
 }
 
 void graph_serialEvent(float val) {
@@ -155,17 +145,53 @@ class workoutData
   int tier; // shows what tier of the workout it is
   float inhaleTime, exhaleTime; // record how long you inhale and exhale for this
   float timeSpent; 
+  color tierColor;
   
   workoutData(int _tier)
   {
     tier = _tier;
     inhaleTime = -99;
     exhaleTime = -99;
+    
+    switch (tier) {
+     case 0:
+       tierColor = color(40, 82, 210,125);
+     break;
+     case 1:
+       tierColor = color(76, 210, 40,125);
+     break;
+     case 2:
+       tierColor = color(176, 143, 25,125);
+     break;
+     case 3:
+       tierColor = color(245, 157, 49,125);
+     break;
+     case 4:
+       tierColor = color(255,20,20,125);
+     break;
+    }
   }
   
   void SetBreathingRates(float newinhale, float newexhale)
   {
     inhaleTime = newinhale;
     exhaleTime = newexhale;
+  }
+  
+  void TierDraw()
+  {
+    fill(tierColor);
+    if(inhaleTime != -99){
+    text("Inhale Time: " + inhaleTime, width/8, (4-tier)*height/10 + height/20);
+    }else{
+      text("Inhale Time: data needed", width/8, (4-tier)*height/10 + height/20);
+    }
+    if(exhaleTime != -99){
+    text("Inhale Time: " + exhaleTime, 7*width/8, (4-tier)*height/10 + height/20);
+    }else{
+      text("Inhale Time: data needed", 7*width/8, (4-tier)*height/10 + height/20);
+    }
+    rectMode(CORNER);
+    rect(26*width/100,(2*height/5)-tier*height/10,width/2, height/10);
   }
 }
