@@ -20,12 +20,12 @@ void bird_draw()
   if(breathPattern.equals("in") && playerY >= 25)
   {
     fill(0);
-   text("going up",width/2, 3*height/5);
+   //text("going up",width/2, 3*height/5);
       playerY-=5;
   }else if( !breathPattern.equals("in")  && playerY <= height-25)
   {
     fill(0);
-   text("going down",width/2, 3*height/5);
+   //text("going down",width/2, 3*height/5);
       playerY+=5;
   }
   
@@ -38,7 +38,7 @@ void bird_draw()
     enemyStack.get(i).enemyDraw();
   }
   fill(0);
-   text("yposition: " + playerY + " with height of " + height,width/2, height/2);
+   //text("yposition: " + playerY + " with height of " + height,width/2, height/2);
   if(timer % 300.0 == 0.0 && enemyStack.size() < 15) 
   {
     enemyStack.add(new Enemy(random(0, height)));

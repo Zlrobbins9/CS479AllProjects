@@ -18,7 +18,7 @@ void meditation_draw()
 
 void BreatheCheck()
 {
-  if(curPressure > prevPressure && curPressure >= pressureFloor-20 && breathPattern == "none") //if breath is just starting
+  if(curPressure > prevPressure+2 && curPressure >= pressureFloor-20 && breathPattern == "none") //if breath is just starting
   {
     breathPattern = "in";
     inhaleStart = millis();
@@ -26,13 +26,13 @@ void BreatheCheck()
       startTier = GetCurrentTier();
     }
   }
-  if(curPressure < prevPressure && breathPattern == "in") //breathing out has begun
+  if(curPressure+3 < prevPressure && breathPattern == "in") //breathing out has begun
   {
     breathPattern = "out";
     if(tab != "bird")
       exhaleStart = millis();
   }
-  if(curPressure > prevPressure && breathPattern == "out") //breathing out has ended
+  if(curPressure > prevPressure+2 && breathPattern == "out") //breathing out has ended
   {
     if(tab != "bird"){
       exhaleEnd = millis();

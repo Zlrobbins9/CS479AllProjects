@@ -1,87 +1,29 @@
-#include <Wire.h>
-
-#include <SparkFun_Bio_Sensor_Hub_Library.h>
-
-// No other Address options.
-#define DEF_ADDR 0x55
-
-
-
-
-
-// Reset pin, MFIO pin
-const int resPin = 4;
-const int mfioPin = 5;
-const int buzz = 12;
-int val = 0;
-
-// Takes address, reset pin, and MFIO pin.
-SparkFun_Bio_Sensor_Hub bioHub(resPin, mfioPin); 
-
-bioData body;  
-
-void setup(){
-
+void setup() {
+  // initialize the serial communication:
   Serial.begin(115200);
-
-  Wire.begin();
-  int result = bioHub.begin();
-  pinMode(buzz,OUTPUT);
-  /*
-  if (!result)
-    Serial.println("Sensor started!");
-  else
-    Serial.println("Could not communicate with the sensor!!!");
-
-  Serial.println("Configuring Sensor...."); 
-  */
-  int error = bioHub.configBpm(MODE_ONE); // Configuring just the BPM settings. 
-  /*
-  if(!error){
-    Serial.println("Sensor configured.");
-  }
-  else {
-    Serial.println("Error configuring sensor.");
-    Serial.print("Error: "); 
-    Serial.println(error); 
-  }
-  */
-  // Data lags a bit behind the sensor, if you're finger is on the sensor when
-  // it's being configured this delay will give some time for the data to catch
-  // up. 
-  delay(4000); 
+  pinMode(10, INPUT); // Setup for leads off detection LO +
+  pinMode(11, INPUT); // Setup for leads off detection LO -
+  
 
 }
 
-void loop(){
-    // Information from the readBpm function will be saved to our "body"
-    // variable.  
-    body = bioHub.readBpm();
-    if(body.heartRate != 0 && body.oxygen != 0){
-      Serial.print(body.heartRate);
-      Serial.print(", "); 
-      Serial.print(body.oxygen); 
-      Serial.print(", ");
-      Serial.println(body.confidence);
-      delay(250); // Slowing it down, we don't need to break our necks here.
+void loop() {
+  
+  if((digitalRead(10) == 1)||(digitalRead(11) == 1)){
+    Serial.print('0');
+    Serial.print(',');
+  }
+  else{
+    // send the value of analog input 0:
+    Serial.print(String(analogRead(A0)));
+    Serial.print(',');
+  }
+  float test = analogRead(A1);
+  if(test > 0)
+  Serial.println(String(test));
+  else{
+     Serial.println('0');
     }
-    
-    if(Serial.available()){
-        val = Serial.read();
-      }
-      if(val == '1'){
-        digitalWrite(buzz,HIGH);
-        delay(100);
-        digitalWrite(buzz,LOW);
-        delay(100);
-        digitalWrite(buzz,HIGH);
-        delay(100);
-        digitalWrite(buzz,LOW); 
-        }
-        else{
-          digitalWrite(buzz,LOW); 
-          }
-    
+  //Wait for a bit to keep serial data from saturating
+  delay(10);
 }
-
-*/

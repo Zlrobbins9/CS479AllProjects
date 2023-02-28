@@ -17,7 +17,8 @@ float curPressure;
 float prevPressure;
 boolean isFakeBreathing = false;
 int exhaleMode = 5;
-float pressureFloor = 1500; //tracks the lowest pressure recorded, set to 1500 because the device's maximum input is 1000.
+int counter = 0;
+float pressureFloor = 0; //tracks the lowest pressure recorded, set to 1500 because the device's maximum input is 1000.
 
 
 void setup() {
@@ -29,11 +30,11 @@ void setup() {
     println(Serial.list()[i]);
   }
   */
-  /*
+  
   String portName = "COM5"; //changer
   myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
   myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
-  */
+  
   
   graph_setup();
   curPressure = 150;
@@ -41,12 +42,14 @@ void setup() {
 
 void draw() {
   //println(tab);
-  prevPressure = curPressure;
+  //prevPressure = curPressure;
   //curPressure = floor(100*sin(tempCounter/60.0)+250);
+  /*
+  //debugging use
   if(isFakeBreathing)
   {
     curPressure+=5;
-  }else if(curPressure >= 150)
+  }else if(curPressure >= 5)
   {
     curPressure-=exhaleMode;
   }
@@ -54,13 +57,17 @@ void draw() {
   {
     pressureFloor = curPressure;
   }
+  */
   //println("current pressure is: " + curPressure);
   
-  heartRate = random(99, 102);
+  /*
+  // heartRate = random(150, 155); //fka eheart rate for debugging
   if(millis() % 10 == 0)
   {
     graph_serialEvent(heartRate);
   }
+  */
+  
   if (tab == "intro"){
     intro_draw();
   }else if (tab == "high_low"){
@@ -92,9 +99,19 @@ void draw() {
 
 void serialEvent (Serial myPort) 
 {
-  
   // get the ASCII string:
-  String inString = myPort.readStringUntil('\n');
+  String input = myPort.readStringUntil('\n');
+  //println(input);
+  String inputs[] = split(input, ",");
+  String inString = inputs[0];
+  //prevPressure =curPressure;
+  //curPressure = float(inputs[1]);
+  //println(curPressure);
+  
+  //if(pressure >currBreath && inhale != true){
+  //  timer(); 
+  //  inhale = true;
+  //}
 
   if (inString != null) 
   {
@@ -126,6 +143,31 @@ void serialEvent (Serial myPort)
     }
   }
 }
+
+void calculateBPM() 
+{  
+  //println("beat_old is " + beat_old);
+  
+  int beat_new = millis();    // get the current millisecond
+  //println("beat_new is " + beat_new);
+  int diff = beat_new - beat_old;    // find the time between the last two beats
+  if(diff == 0 || beat_old+15000 > beat_new){
+    //println("15 seconds has not passed since the first beat yet, incrementing counter...");
+    counter++;
+    return;
+  }
+  float currentBPM = counter*4;    // convert to beats per minute
+  beats[beatIndex] = currentBPM;
+  println("current BPM is: " + currentBPM);
+  counter = 0;// store to array to convert the average
+  float total = 0.0;
+  for (int i = 0; i < 500; i++){
+    total += beats[i];
+  }
+  BPM = int(total / 500);
+  beat_old = beat_new;
+  beatIndex = (beatIndex + 1) % 500;  // cycle through the array instead of using FIFO queue
+  }
 /*
 //old serialevent code
 void serialEvent(Serial myPort) {

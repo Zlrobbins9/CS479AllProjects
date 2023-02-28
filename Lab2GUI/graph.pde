@@ -147,6 +147,7 @@ class workoutData
   float timeSpent; 
   color tierColor;
   
+  
   workoutData(int _tier)
   {
     tier = _tier;

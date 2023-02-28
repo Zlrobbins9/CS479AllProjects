@@ -40,21 +40,3 @@ void TestGraphDraw () {
         text("BPM: " + inByte, 15, 10);
       }
 }
-
-
-
-  
-void calculateBPM () 
-{  
-  int beat_new = millis();    // get the current millisecond
-  int diff = beat_new - beat_old;    // find the time between the last two beats
-  float currentBPM = 60000 / diff;    // convert to beats per minute
-  beats[beatIndex] = currentBPM;  // store to array to convert the average
-  float total = 0.0;
-  for (int i = 0; i < 500; i++){
-    total += beats[i];
-  }
-  BPM = int(total / 500);
-  beat_old = beat_new;
-  beatIndex = (beatIndex + 1) % 500;  // cycle through the array instead of using FIFO queue
-  }
