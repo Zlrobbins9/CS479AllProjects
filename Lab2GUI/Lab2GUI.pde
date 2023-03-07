@@ -104,8 +104,8 @@ void serialEvent (Serial myPort)
   //println(input);
   String inputs[] = split(input, ",");
   String inString = inputs[0];
-  //prevPressure =curPressure;
-  //curPressure = float(inputs[1]);
+  prevPressure =curPressure;
+  curPressure = float(inputs[1]);
   //println(curPressure);
   
   //if(pressure >currBreath && inhale != true){
@@ -149,39 +149,24 @@ void calculateBPM()
   //println("beat_old is " + beat_old);
   
   int beat_new = millis();    // get the current millisecond
-  //println("beat_new is " + beat_new);
+  println("beat_new is " + beat_new);
   int diff = beat_new - beat_old;    // find the time between the last two beats
-  if(diff == 0 || beat_old+15000 > beat_new){
-    //println("15 seconds has not passed since the first beat yet, incrementing counter...");
+  if(diff == 0 || beat_old+3000 > beat_new){
+    println("1 second has not passed since the first beat yet, incrementing counter...");
     counter++;
     return;
   }
-  float currentBPM = counter*4;    // convert to beats per minute
+  float currentBPM = counter*60;    // convert to beats per minute
+  heartRate = currentBPM;
   beats[beatIndex] = currentBPM;
   println("current BPM is: " + currentBPM);
   counter = 0;// store to array to convert the average
   float total = 0.0;
-  for (int i = 0; i < 500; i++){
+  for (int i = 0; i < beats.length; i++){
     total += beats[i];
   }
-  BPM = int(total / 500);
+  //heartRate = int(total / beats.length);
   beat_old = beat_new;
-  beatIndex = (beatIndex + 1) % 500;  // cycle through the array instead of using FIFO queue
+  beatIndex = (beatIndex + 1) % beats.length;  // cycle through the array instead of using FIFO queue
+  
   }
-/*
-//old serialevent code
-void serialEvent(Serial myPort) {
-  String tempVal = myPort.readStringUntil('\n');
-  String inputs[] = split(tempVal, ", ");
-  inputs[inputs.length-1] = inputs[inputs.length-1].trim();
-  heartRate = float(inputs[0]);
-  bloodOxygen = float(inputs[1]);
-  confidence = float(inputs[2]);
-  if (tempVal != null) {
-    tempVal = trim(tempVal);
-    float val = float(tempVal);
-    high_low_serialEvent(val);
-    graph_serialEvent(heartRate);
-   println(heartRate);
-  }
-}*/
