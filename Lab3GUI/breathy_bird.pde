@@ -2,6 +2,7 @@ int playerY = height/2;
 float timer = 0;
 boolean game_lost = false;
 float StartTime;
+String breathPattern = "none";
 ArrayList<Enemy> enemyStack = new ArrayList<Enemy>(0);
 
 void bird_setup()
@@ -60,6 +61,18 @@ void loser_draw()
   text("press R to go to the relaxation GUI", width/2, 17*height/20);
 }
 
+void BreatheCheck()
+{
+  if(curPressure > prevPressure+2 && curPressure >= pressureFloor-20 && breathPattern == "none"){ //if breath is just starting
+    breathPattern = "in";
+  }
+  if(curPressure+3 < prevPressure && breathPattern == "in"){ //breath out begins
+    breathPattern = "out";
+  }
+  if(curPressure > prevPressure+2 && breathPattern == "out"){ //breathing out has ended
+    breathPattern = "in";
+  }
+}
 
 class Enemy
 {

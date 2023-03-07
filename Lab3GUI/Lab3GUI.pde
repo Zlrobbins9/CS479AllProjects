@@ -1,19 +1,26 @@
 import org.gicentre.utils.stat.*;
 import processing.serial.*;
 
+int xPos = 1;         // horizontal position of the graph
+
+float inByte = 0;
+float curPressure;
+int BPM = 0;
+int beatIndex;
+boolean belowThreshold = true;
+
+
 
 Serial myPort; // The serial port
 
 String tab = "intro";
-
 boolean stressed = false;
-float heartRate = 100;
-float RHRAvg = -99;
-float bloodOxygen;
-float confidence;
-float restingRate = 0.0;
 ArrayList<Float> restingRateList = new ArrayList<Float>(0);
-float curPressure;
+ArrayList<Float> MFPressureList = new ArrayList<Float>(0);
+ArrayList<Float> LFPressureList = new ArrayList<Float>(0);
+ArrayList<Float> MMPressureList = new ArrayList<Float>(0);
+ArrayList<Float> HeelPressureList = new ArrayList<Float>(0);
+
 float prevPressure;
 boolean isFakeBreathing = false;
 int exhaleMode = 5;
@@ -32,8 +39,8 @@ void setup() {
   */
   
   String portName = "COM5"; //changer
-  myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
-  myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
+  //myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
+  //myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
   
   
   graph_setup();
@@ -70,26 +77,8 @@ void draw() {
   
   if (tab == "intro"){
     intro_draw();
-  }else if (tab == "high_low"){
-    //high_low_draw();
-    pushStyle();
-    background(200);
-    textSize(30);
-    fill(204, 102, 0);
-    textAlign(CENTER, CENTER);
-    text("Heart rate: " + heartRate, width/2,height/3);
-    text("Time between beats: " + (heartRate/60.0), width/2,height/2);
-    text("Confidence: " + confidence, width/2, 50);
-    popStyle();
-    
   }else if (tab == "graph"){
     graph_draw();
-  }else if(tab == "rest"){
-    rest_draw();
-  }else if(tab == "relax"){
-    relax_draw();
-  }else if(tab == "meditation"){
-    meditation_draw();
   }else if(tab == "bird"){
     bird_draw();
   }else if(tab == "loser"){
@@ -129,44 +118,6 @@ void serialEvent (Serial myPort)
     {
       stroke(0xff, 0, 0); //Set stroke to red ( R, G, B)
       inByte = float(inString); 
-      
-      // BPM calculation check
-      if (inByte > threshold && belowThreshold == true)
-      {
-        calculateBPM();
-        belowThreshold = false;
-      }
-      else if(inByte < threshold)
-      {
-        belowThreshold = true;
-      }
     }
   }
 }
-
-void calculateBPM() 
-{  
-  //println("beat_old is " + beat_old);
-  
-  int beat_new = millis();    // get the current millisecond
-  println("beat_new is " + beat_new);
-  int diff = beat_new - beat_old;    // find the time between the last two beats
-  if(diff == 0 || beat_old+3000 > beat_new){
-    println("1 second has not passed since the first beat yet, incrementing counter...");
-    counter++;
-    return;
-  }
-  float currentBPM = counter*60;    // convert to beats per minute
-  heartRate = currentBPM;
-  beats[beatIndex] = currentBPM;
-  println("current BPM is: " + currentBPM);
-  counter = 0;// store to array to convert the average
-  float total = 0.0;
-  for (int i = 0; i < beats.length; i++){
-    total += beats[i];
-  }
-  //heartRate = int(total / beats.length);
-  beat_old = beat_new;
-  beatIndex = (beatIndex + 1) % beats.length;  // cycle through the array instead of using FIFO queue
-  
-  }
