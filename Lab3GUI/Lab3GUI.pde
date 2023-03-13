@@ -1,31 +1,18 @@
 import org.gicentre.utils.stat.*;
 import processing.serial.*;
 
-int xPos = 1;         // horizontal position of the graph
-
 float inByte = 0;
-float curPressure;
-int BPM = 0;
-int beatIndex;
-boolean belowThreshold = true;
-
-
-
 Serial myPort; // The serial port
 
 String tab = "intro";
-boolean stressed = false;
 ArrayList<Float> restingRateList = new ArrayList<Float>(0);
-ArrayList<Float> MFPressureList = new ArrayList<Float>(0);
-ArrayList<Float> LFPressureList = new ArrayList<Float>(0);
-ArrayList<Float> MMPressureList = new ArrayList<Float>(0);
-ArrayList<Float> HeelPressureList = new ArrayList<Float>(0);
+float CurMF = 25, CurLF = 50, CurMM = 75, CurHeel = 100, CurMFP = 0;
+FloatList MFPressureList = new FloatList(), LFPressureList = new FloatList(), MMPressureList = new FloatList(), HeelPressureList = new FloatList(), MFPList = new FloatList();
+FloatList FeetSensor_XVals = new FloatList();
+int FeetSensorCount = 0;
 
+float curPressure;
 float prevPressure;
-boolean isFakeBreathing = false;
-int exhaleMode = 5;
-int counter = 0;
-float pressureFloor = 0; //tracks the lowest pressure recorded, set to 1500 because the device's maximum input is 1000.
 
 
 void setup() {
@@ -48,41 +35,17 @@ void setup() {
 }
 
 void draw() {
-  //println(tab);
-  //prevPressure = curPressure;
-  //curPressure = floor(100*sin(tempCounter/60.0)+250);
-  /*
-  //debugging use
-  if(isFakeBreathing)
-  {
-    curPressure+=5;
-  }else if(curPressure >= 5)
-  {
-    curPressure-=exhaleMode;
-  }
-  if(curPressure <= pressureFloor && curPressure > 10) //record a lowest value if its not a blatant misread
-  {
-    pressureFloor = curPressure;
-  }
-  */
-  //println("current pressure is: " + curPressure);
   
-  /*
-  // heartRate = random(150, 155); //fka eheart rate for debugging
-  if(millis() % 10 == 0)
-  {
-    graph_serialEvent(heartRate);
-  }
-  */
+  update_feetgraphs(); //TODO: move this to SerialEvent once the cur pressure values are being updated
   
   if (tab == "intro"){
     intro_draw();
   }else if (tab == "graph"){
     graph_draw();
   }else if(tab == "bird"){
-    bird_draw();
+    //bird_draw();
   }else if(tab == "loser"){
-     loser_draw(); 
+     //loser_draw(); 
   }
 }
 
@@ -95,12 +58,6 @@ void serialEvent (Serial myPort)
   String inString = inputs[0];
   prevPressure =curPressure;
   curPressure = float(inputs[1]);
-  //println(curPressure);
-  
-  //if(pressure >currBreath && inhale != true){
-  //  timer(); 
-  //  inhale = true;
-  //}
 
   if (inString != null) 
   {
