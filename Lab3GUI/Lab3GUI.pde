@@ -4,9 +4,9 @@ import processing.serial.*;
 float inByte = 0;
 Serial myPort; // The serial port
 
-String tab = "intro";
+String tab = "graph";
 ArrayList<Float> restingRateList = new ArrayList<Float>(0);
-float CurMF = 201, CurLF = 401, CurMM = 601, CurHeel = 801, CurMFP = 0;
+float CurMF = 0, CurLF = 0, CurMM = 0, CurHeel = 0, CurMFP = 0;
 FloatList MFPressureList = new FloatList(), LFPressureList = new FloatList(), MMPressureList = new FloatList(), HeelPressureList = new FloatList(), MFPList = new FloatList();
 FloatList FeetSensor_XVals = new FloatList();
 int FeetSensorCount = 0;
@@ -26,7 +26,9 @@ void setup() {
   */
   
   String portName = "COM5"; //changer
+  delay(1000);
   myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
+  
   myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
   
   dance_setup();
@@ -56,4 +58,5 @@ void serialEvent(Serial myPort) {
   float y = float(inputs[5]);
   float z = float(inputs[6]);
   update_feetgraphs();
+  //delay(500);
   }

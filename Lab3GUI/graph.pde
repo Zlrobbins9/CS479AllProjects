@@ -1,7 +1,7 @@
 XYChart lineChart, MFGraph, LFGraph, MMGraph, HeelStepGraph, MFPGraph;
 FloatList lineChartX = new FloatList(), lineChartY = new FloatList();
 PImage OwOFoot;
-String walkMode = "none";
+String walkMode = "toe stepping";
 
 int count;
 int startTier = 1;
@@ -83,15 +83,9 @@ void graph_draw() {
   rectMode(CENTER);
   
   DrawFoot();
-  
-  if(CurMFP > 10)
-  {
-    
-  }
-  text("The current walking mode is: " + walkMode, width/2, 21*height/32);
 
-  
-  fill(0);
+  //text("The current walking mode is: " + walkMode, width/3, 21*height/32);
+
 }
 
 void DrawFoot()

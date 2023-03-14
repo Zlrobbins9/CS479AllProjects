@@ -1,5 +1,10 @@
 PImage rightArrow, leftArrow, upArrow, downArrow, rightArrow2, leftArrow2, upArrow2, downArrow2;
 
+ArrowEnemy enemy1;
+  ArrowEnemy enemy2;
+  ArrowEnemy enemy3;
+  ArrowEnemy enemy4;
+  int counter = 0;
 
 void dance_setup()
 {
@@ -21,6 +26,10 @@ void dance_setup()
   upArrow2.resize(200,200);
   downArrow2.resize(200,200);
   
+  enemy1 = new ArrowEnemy("up");
+  enemy2 = new ArrowEnemy("down");
+  enemy3 = new ArrowEnemy("left");
+  enemy4 = new ArrowEnemy("right");
 }
 
 
@@ -32,23 +41,55 @@ void dance_draw()
   image(leftArrow, 3*width/8, height/10);
   image(upArrow, 5*width/8, height/10);
   image(downArrow, 7*width/8, height/10);
+  
+  counter++;
+  enemy1.badDraw();
+  
+  if(counter > 120)
+  enemy2.badDraw();
+  if(counter > 180)
+  enemy3.badDraw();
+  if(counter > 240)
+  enemy4.badDraw();
 }
 
-/*
+
 class ArrowEnemy
 {
   float xpos, ypos;
-  //String type;
-  ArrowEnemy()
+  String type;
+  PImage asset;
+  ArrowEnemy(String _type)
   {
-    xpos = height;
+    type = _type;
+    if(type.equals("down"))
+    {
+      asset = downArrow2;
+      type = "down";
+      xpos = 7*width/8;
+    }else if(type.equals("up")){
+      asset = upArrow2;
+      type = "up";
+      xpos = 5*width/8;
+    }else if(type.equals("left")){
+      asset = leftArrow2;
+      type = "left";
+      xpos = 3*width/8;
+    }else{
+      asset = rightArrow2;
+      type = "right";
+      xpos = width/8;
+    }
     ypos = height;
   }
   
   void badDraw()
   {
-    
-    
+    image(asset, xpos, ypos);
+    ypos -=2;
+    if(ypos <= height/10)
+    {
+       ypos = height; 
+    }
   }
 }
-*/
