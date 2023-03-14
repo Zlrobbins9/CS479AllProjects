@@ -1,6 +1,7 @@
 XYChart lineChart, MFGraph, LFGraph, MMGraph, HeelStepGraph, MFPGraph;
 FloatList lineChartX = new FloatList(), lineChartY = new FloatList();
-
+PImage OwOFoot;
+String walkMode = "none";
 
 int count;
 int startTier = 1;
@@ -15,6 +16,7 @@ void graph_setup() {
   
   lineChart.setData(lineChartX.array(), lineChartY.array());
   
+  OwOFoot = loadImage("footOwO.png");
   
   MFGraph.setData(FeetSensor_XVals.array(), MFPressureList.array());
   LFGraph.setData(FeetSensor_XVals.array(), LFPressureList.array());
@@ -22,20 +24,10 @@ void graph_setup() {
   HeelStepGraph.setData(FeetSensor_XVals.array(), HeelPressureList.array());
   MFPGraph.setData(FeetSensor_XVals.array(), MFPList.array());
   
-  //lineChart.showXAxis(true);
-  //lineChart.showYAxis(true);
-  //lineChart.setMinY(50);
-  //lineChart.setMaxY(200);
-  //lineChart.setYFormat("00");
-  //lineChart.setXFormat("0");
-  //lineChart.setPointColour(color(125, 100));
-  //lineChart.setPointSize(width/100);
-  //lineChart.setLineWidth(width/300);
-  
   LFGraph.setYAxisLabel("LF Graph");
   LFGraph.showYAxis(true);
   LFGraph.setMinY(0);
-  LFGraph.setMaxY(125);
+  LFGraph.setMaxY(1000);
   LFGraph.setYFormat("00");
   LFGraph.setXFormat("0");
   LFGraph.setPointColour(color(125, 100));
@@ -45,7 +37,7 @@ void graph_setup() {
   MFGraph.setYAxisLabel("MF Graph");
   MFGraph.showYAxis(true);
   MFGraph.setMinY(0);
-  MFGraph.setMaxY(125);
+  MFGraph.setMaxY(1000);
   MFGraph.setYFormat("00");
   MFGraph.setXFormat("0");
   MFGraph.setPointColour(color(125, 100));
@@ -55,7 +47,7 @@ void graph_setup() {
   MMGraph.setYAxisLabel("MM Graph");
   MMGraph.showYAxis(true);
   MMGraph.setMinY(0);
-  MMGraph.setMaxY(125);
+  MMGraph.setMaxY(1000);
   MMGraph.setYFormat("00");
   MMGraph.setXFormat("0");
   MMGraph.setPointColour(color(125, 100));
@@ -65,7 +57,7 @@ void graph_setup() {
   HeelStepGraph.setYAxisLabel("Heel Graph");
   HeelStepGraph.showYAxis(true);
   HeelStepGraph.setMinY(0);
-  HeelStepGraph.setMaxY(125);
+  HeelStepGraph.setMaxY(1000);
   HeelStepGraph.setYFormat("00");
   HeelStepGraph.setXFormat("0");
   HeelStepGraph.setPointColour(color(125, 100));
@@ -75,7 +67,7 @@ void graph_setup() {
   MFPGraph.setYAxisLabel("MFP Graph");
   MFPGraph.showYAxis(true);
   MFPGraph.setMinY(0);
-  MFPGraph.setMaxY(125);
+  MFPGraph.setMaxY(100);
   MFPGraph.setYFormat("00");
   MFPGraph.setXFormat("0");
   MFPGraph.setPointColour(color(125, 100));
@@ -89,9 +81,49 @@ void graph_draw() {
   background(220);
   DrawGraph();
   rectMode(CENTER);
+  
+  DrawFoot();
+  
+  if(CurMFP > 10)
+  {
+    
+  }
+  text("The current walking mode is: " + walkMode, width/2, 21*height/32);
 
   
   fill(0);
+}
+
+void DrawFoot()
+{
+  imageMode(CENTER);
+  image(OwOFoot, width/2, height/3);
+  DrawFootCircles(CurMF, 19*width/40, height/5);
+  DrawFootCircles(CurLF, 21*width/40, 3*height/10);
+  DrawFootCircles(CurMM, 19*width/40, 4*height/10);
+  DrawFootCircles(CurHeel, 20*width/40, 11*height/20);
+  
+}
+
+void DrawFootCircles(float curvalue, float xpos, float ypos)
+{
+  if(curvalue > 800)
+  {
+    fill(255,0,0);
+  }else if(curvalue > 600)
+  {
+    fill(255,125,0);
+  }else if(curvalue > 400)
+  {
+    fill(255,255,0);
+  }else if(curvalue > 200)
+  {
+    fill(125, 255,0);
+  }else
+  {
+    return;
+  }
+  ellipse(xpos, ypos,50,50);
 }
 
 void DrawGraph()
@@ -102,17 +134,16 @@ void DrawGraph()
   LFGraph.draw(3*width/4, 0, width/4, height/4);
   MMGraph.draw(width/30, 11*height/16, width/4, height/4);
   HeelStepGraph.draw(3*width/4, 11*height/16, width/4, height/4);
-  MFPGraph.draw(3*width/8, 3*height/8, width/4, height/4);
+  MFPGraph.draw(3*width/8, 11*height/16, width/4, height/4);
   
   textSize(40);
   fill(150);
-  text("current Medial Force Percentage: " + CurMFP, width/2, 3*height/4);
+  //text("current Medial Force Percentage: " + CurMFP, width/2, 21*height/32);
 }
 
 
 void update_feetgraphs()
 {
-  
   FeetSensorCount++;
   //println("feet sensor count is: " + FeetSensorCount);
   FeetSensor_XVals.append(FeetSensorCount);
@@ -138,18 +169,4 @@ void update_feetgraphs()
   MMGraph.setData(FeetSensor_XVals.array(), MMPressureList.array());
   HeelStepGraph.setData(FeetSensor_XVals.array(), HeelPressureList.array());
   MFPGraph.setData(FeetSensor_XVals.array(), MFPList.array());
-}
-
-
-void graph_serialEvent(float val) {
-  count++;
-  //lineChartX.append(count);
-  //lineChartY.append(val);
-  
-  if (lineChartX.size() > 7 && lineChartY.size() > 7) {
-    lineChartX.remove(0);
-    lineChartY.remove(0);
-  }
-  
-  lineChart.setData(lineChartX.array(), lineChartY.array());
 }

@@ -12,7 +12,7 @@ void keyPressed() {
       
       case 'w':
       MFStep = true;
-      CurMF +=1;
+      
       break;
       
       case 'e':
@@ -45,16 +45,19 @@ void keyReleased()
       tab = "graph";
       break;
       
+    case 'd':
+      tab = "dance";
+      
       case 'w':
-      MFStep = true;
+      MFStep = false;
       break;
       
       case 'e':
-      LFStep = true;
+      LFStep = false;
       break;
       
       case 's':
-      MMStep = true;
+      MMStep = false;
       break;
       
       case 'x':

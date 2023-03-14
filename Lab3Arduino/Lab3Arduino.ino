@@ -1,29 +1,37 @@
+//18.55 //normal
+//19.77 tip toe
+// 18.00 heel
+#include <MPU6050_tockn.h>
+#include <Wire.h>
+MPU6050 mpu6050(Wire);
+unsigned long timer = 0;
 void setup() {
+
   // initialize the serial communication:
   Serial.begin(115200);
-  pinMode(10, INPUT); // Setup for leads off detection LO +
-  pinMode(11, INPUT); // Setup for leads off detection LO -
-  
+  Wire.begin();
+  mpu6050.begin();
+  mpu6050.calcGyroOffsets();
+  pinMode(3,OUTPUT);
+  pinMode(5,OUTPUT);
+  pinMode(6,OUTPUT);
+  pinMode(9,OUTPUT);
+ 
 
 }
 
 void loop() {
-  
-  if((digitalRead(10) == 1)||(digitalRead(11) == 1)){
-    Serial.print('0');
-    Serial.print(',');
-  }
-  else{
-    // send the value of analog input 0:
-    Serial.print(String(analogRead(A0)));
-    Serial.print(',');
-  }
-  float test = analogRead(A1);
-  if(test > 0)
-  Serial.println(String(test));
-  else{
-     Serial.println('0');
-    }
-  //Wait for a bit to keep serial data from saturating
-  delay(10);
+ mpu6050.update();
+ int MF = analogRead(A0);
+ int LF = analogRead(A1);
+ int MM=analogRead(A2);
+ int HEEL=analogRead(A3);
+ if((millis()-timer)>10){
+    analogWrite(3,MF/4);
+ analogWrite(5,LF/4);
+ analogWrite(6,MM/4);
+ analogWrite(9,HEEL/4);
+  Serial.println(String(MF)+ "," + String(LF) +","+ String(MM) + "," + String(HEEL)+","+String(mpu6050.getAccX())+","+String(mpu6050.getAccY())+","+String(mpu6050.getAccZ()));
+  timer = millis();
+ }
 }
