@@ -6,10 +6,6 @@ void keyPressed() {
       tab = "intro";
       break;
       
-    case 'g':
-      tab = "graph";
-      break;
-      
       case 'w':
       MFStep = true;
       
