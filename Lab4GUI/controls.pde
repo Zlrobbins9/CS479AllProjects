@@ -2,30 +2,38 @@ boolean MFStep = false, LFStep = false, MMStep = false, HeelStep = false;
 
 void keyPressed() {
   switch (key) {
-    case 'i':
-      tab = "intro";
+    case 't':
+      if(tab != "game")
+      tab = "game";
       break;
       
       case 'w':
-      MFStep = true;
+      up = true;
       
       break;
       
-      case 'e':
-      LFStep = true;
+      case 'a':
+      left = true;
       break;
       
       case 's':
-      MMStep = true;
+      down = true;
       break;
       
-      case 'x':
-      HeelStep = true;
+      case 'd':
+      right = true;
       break;
       
-      case 'b':
-      tab = "bird";
-      //bird_setup();
+      case 'p':
+      speak = true;
+      break;
+      
+      case 'l':
+      fight = true;
+      break;
+      
+      case 'm':
+      travel = true;
       break;
   }
 }
@@ -37,27 +45,32 @@ void keyReleased()
       tab = "intro";
       break;
       
-    case 'g':
-      tab = "graph";
-      break;
-      
-    case 'd':
-      tab = "dance";
-      
       case 'w':
-      MFStep = false;
+      up = false;
       break;
       
-      case 'e':
-      LFStep = false;
+      case 'a':
+      left = false;
       break;
       
       case 's':
-      MMStep = false;
+      down = false;
       break;
       
-      case 'x':
-      HeelStep = false;
+      case 'd':
+      right = false;
+      break;
+      
+      case 'p':
+      speak = false;
+      break;
+      
+      case 'l':
+      fight = false;
+      break;
+      
+      case 'm':
+      travel = false;
       break;
   }
   

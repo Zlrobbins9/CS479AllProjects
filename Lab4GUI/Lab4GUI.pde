@@ -4,8 +4,9 @@ import processing.serial.*;
 float inByte = 0;
 Serial myPort; // The serial port
 
-String tab = "graph";
+String tab = "intro";
 boolean up = false, down = false, left = false, right = false;
+boolean speak = false, fight = false, travel = false;
 float x,y;
 
 void setup() {
@@ -20,30 +21,28 @@ void setup() {
   }
   */
   
+  gameSetup();
   String portName = "COM5"; //changer
   delay(1000);
-  myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
+  //myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
   
-  myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
+  //myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
   //test_setup();
 }
 
 void draw() {
-  background(125);
-  if(up){
-    y-=10;
-  }
-  if(down){
-    y+=10;
-  }
-  if(left){
-    x-=10;
-  }
-  if(right){
-    x+=10;
+  switch(tab)
+  {
+    case "intro":
+    introDraw();
+    break;
+    case "game":
+    gameDraw();
+    break;
   }
   
-  ellipse(x,y,50,50);
+  
+  
   }
 
 void serialEvent(Serial myPort) {
@@ -59,28 +58,53 @@ void serialEvent(Serial myPort) {
     case "0 released":
       up = false;
     break;
+    
     case "1 touched":
      left = true;
     break;
     case "1 released":
       left = false;
     break;
+    
     case "2 touched":
       down = true;
     break;
     case "2 released":
       down = false;
     break;
+    
     case "3 touched":
       right = true;
     break;
     case "3 released":
       right = false;
     break;
+    
+    
+    case "4 touched":
+     speak = true;
+    break;
+    case "4 released":
+      speak = false;
+    break;
+    
+    case "5 touched":
+      fight = true;
+    break;
+    case "5 released":
+      fight = false;
+    break;
+    
+    case "6 touched":
+      travel = true;
+    break;
+    case "6 released":
+      travel = false;
+    break;
+    
+    
     default:
     println("no input :(");
     break;
   }
-  //update_feetgraphs();
-  //delay(500);
   }
