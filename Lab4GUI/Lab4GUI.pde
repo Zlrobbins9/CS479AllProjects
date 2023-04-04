@@ -21,6 +21,8 @@ void setup() {
   }
   */
   
+  intro = loadImage("Title.jpg");
+  intro.resize(width, height);
   gameSetup();
   String portName = "COM5"; //changer
   delay(1000);

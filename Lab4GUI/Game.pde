@@ -4,7 +4,8 @@ int cooldownTimer = 0;
 
 PImage fightButton, moveButton, speakButton, uwuSlime;
 
-boolean monkeyPacified = false;
+boolean monkeyPacified = false, chestOpened = false;
+int chestHealth = 3;
 
 ArrayList<Scene> sceneList = new ArrayList<Scene>();
 int curScene = 0;
@@ -23,12 +24,14 @@ void gameSetup()
   uwuSlime.resize(width/6, width/6);
   
   sceneList.add(new Scene(new String[]{"move north", "", "", ""}, new String[]{"Throw a rock","Put in a chokehold","Punch","Kick"},new String[]{"Give B A N A N A.","Imitate the monkey","Ask for directions","Indoctrinate into Christianity"}, "You encounter a monkey. It looks at you with curiosity."));
-  sceneList.get(0).AddResults(new String[]{"You would leave, but you are scared of monkeys.","","",""}, new String[]{"You missed.","you tried to grab it, but it was too fast","you whiffed and punched air","you missed and kicked the tree, ouch."},new String[]{"you lack B A N A N A to give","you made monkey noises at it. It didnt understand your american accent.","It did not udnerstand you"," You read the monkey Genesis 1:20. Inspired to fulfil god's plan, the monkey left"}, "with the monkey gone, you can now pass.");
+  sceneList.get(0).AddResults(new String[]{"You would leave, but you are scared of monkeys.","","",""}, new String[]{"You missed.","you tried to grab it, but it was too fast","you whiffed and punched air","you missed and kicked the tree, ouch."},new String[]{"you lack B A N A N A to give","you made monkey noises at it. It didnt understand your american accent.","It did not understand you"," You read the monkey Genesis 1:20. Inspired to fulfil god's plan, the monkey left"}, "with the monkey gone, you can now pass.");
   
+  sceneList.add(new Scene(new String[]{"", "", "", ""}, new String[]{"low sweep it","punch it","cast fireball","bite it"},new String[]{"take the chest","","",""}, "Congratulations for repelling the monkey! I put a chest in this room to reward you."));
+  sceneList.get(1).AddResults(new String[]{"","","",""}, new String[]{"You knocked the horrifying creature off its feet! it took damage.","you punch the beast, and its exterior cracks a bit","you cast fireball! You and the chest took 1 damage","did...did you just bite it? Why?"},new String[]{"as you go to take the chest, it sprouts arms and legs, and attacks!","","",""}, "with the chest defeated, the game is done. Thanks for playing!");
 }
 void gameDraw()
 {
-  
+
   if(OnCooldown)
   {
     cooldownTimer++;
@@ -40,7 +43,13 @@ void gameDraw()
     cooldownTimer = 0;
     }
   }
+  
+  if(curScene == 0){
   background(108, 145, 105);
+  }else
+ {
+   background(153, 100, 35);
+ }
   DisplayGUI();
   image(uwuSlime, width/8, height/8);
   rectMode(CORNER);
@@ -51,7 +60,19 @@ void gameDraw()
   if(!OnCooldown)
   {
     fill(250, 185, 249);
-    text(sceneList.get(curScene).StrtText ,width/4, height/11, 11*width/16, height/5);
+      if(monkeyPacified == false || (curScene == 1 && chestOpened == false))
+      {
+        text(sceneList.get(curScene).StrtText ,width/4, height/11, 11*width/16, height/5);
+      }else if(curScene == 0 && monkeyPacified == true)
+      {
+        text("the monkey has left, so theres nothing left to do but leave" ,width/4, height/11, 11*width/16, height/5);
+      }else if(curScene == 1 && chestOpened == true && chestHealth > 0)
+      {
+        text("the sentient chest monster roared with fury" ,width/4, height/11, 11*width/16, height/5);
+      }else if(curScene == 1 && chestHealth <= 0)
+      {
+        text("the chest is dead. you have won the game." ,width/4, height/11, 11*width/16, height/5);
+      }
   }else 
   {
     fill(250, 185, 249);
@@ -61,9 +82,18 @@ void gameDraw()
       if(speak)
       {
         text(sceneList.get(curScene).ResultsS[0] ,width/4, height/11, 11*width/16, height/5);
+        if(curScene== 1 && chestOpened == false)
+        {
+          
+          chestOpened = true;
+        }
       }else if(fight)
       {
         text(sceneList.get(curScene).ResultsF[0] ,width/4, height/11, 11*width/16, height/5);
+        if(curScene == 1 && chestOpened == true)
+        {
+          chestHealth -=1;
+        }
       }else if(move){
         if(sceneList.get(curScene).ResultsM[0].equals(""))
         {
@@ -74,6 +104,12 @@ void gameDraw()
           {
             text(sceneList.get(curScene).EndText ,width/4, height/11, 11*width/16, height/5);
             curScene++;
+            up = false;
+            down = false;
+            left = false;
+            right = false;
+            OnCooldown = false;
+            cooldownTimer = 0;
           }else
           {
             text(sceneList.get(curScene).ResultsM[0] ,width/4, height/11, 11*width/16, height/5);
@@ -88,6 +124,10 @@ void gameDraw()
       }else if(fight)
       {
         text(sceneList.get(curScene).ResultsF[1] ,width/4, height/11, 11*width/16, height/5);
+        if(curScene == 1 && chestOpened == true)
+        {
+          chestHealth -=1;
+        }
       }else if(move){
         if(sceneList.get(curScene).ResultsM[1].equals(""))
         {
@@ -104,6 +144,10 @@ void gameDraw()
       }else if(fight)
       {
         text(sceneList.get(curScene).ResultsF[2] ,width/4, height/11, 11*width/16, height/5);
+        if(curScene == 1 && chestOpened == true)
+        {
+          chestHealth -=1;
+        }
       }else if(move){
         if(sceneList.get(curScene).ResultsM[2].equals(""))
         {

@@ -1,11 +1,18 @@
-
+PImage intro;
 void introDraw()
 {
   background(0);
   fill(255);
   textSize(40);
   textAlign(CENTER);
-  text("welcome to the Slime RPG", width/2, height/2);
-  text("press T to start", width/2, 11*height/20);
+    image(intro,0,0);
+
+  
+  if(up && down)
+  {
+      tab = "game";
+      up = false;
+      down = false;
+  }
   
 }
