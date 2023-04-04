@@ -1,9 +1,14 @@
 boolean OnCooldown = false;
+int cooldownTimer = 0;
 //TODO: create a cooldown system for inputs
 
 PImage fightButton, moveButton, speakButton, uwuSlime;
 
-ArrayList<String> gameList = new ArrayList<String>();
+boolean monkeyPacified = false;
+
+ArrayList<Scene> sceneList = new ArrayList<Scene>();
+int curScene = 0;
+
 
 void gameSetup()
 {
@@ -17,16 +22,120 @@ void gameSetup()
   speakButton.resize(width/4, height/4);
   uwuSlime.resize(width/6, width/6);
   
+  sceneList.add(new Scene(new String[]{"move north", "", "", ""}, new String[]{"Throw a rock","Put in a chokehold","Punch","Kick"},new String[]{"Give B A N A N A.","Imitate the monkey","Ask for directions","Indoctrinate into Christianity"}, "You encounter a monkey. It looks at you with curiosity."));
+  sceneList.get(0).AddResults(new String[]{"You would leave, but you are scared of monkeys.","","",""}, new String[]{"You missed.","you tried to grab it, but it was too fast","you whiffed and punched air","you missed and kicked the tree, ouch."},new String[]{"you lack B A N A N A to give","you made monkey noises at it. It didnt understand your american accent.","It did not udnerstand you"," You read the monkey Genesis 1:20. Inspired to fulfil god's plan, the monkey left"}, "with the monkey gone, you can now pass.");
   
 }
 void gameDraw()
 {
+  
+  if(OnCooldown)
+  {
+    cooldownTimer++;
+    
+    if(cooldownTimer >=300)
+    {
+    OnCooldown = false;
+    up=false; down = false; left = false;right = false; move = false; fight = false; speak = false;
+    cooldownTimer = 0;
+    }
+  }
   background(108, 145, 105);
   DisplayGUI();
   image(uwuSlime, width/8, height/8);
   rectMode(CORNER);
   rect(width/4, height/20, 11*width/16, height/5);
   triangle(width/4, height/4, width/4, height/4-height/20, width/6, 9*height/40);
+  textAlign(CORNER);
+  fill(250, 185, 249);
+  if(!OnCooldown)
+  {
+    fill(250, 185, 249);
+    text(sceneList.get(curScene).StrtText ,width/4, height/11, 11*width/16, height/5);
+  }else 
+  {
+    fill(250, 185, 249);
+    text("press T to return to options", width/20,height/20);
+    
+    if(up){
+      if(speak)
+      {
+        text(sceneList.get(curScene).ResultsS[0] ,width/4, height/11, 11*width/16, height/5);
+      }else if(fight)
+      {
+        text(sceneList.get(curScene).ResultsF[0] ,width/4, height/11, 11*width/16, height/5);
+      }else if(move){
+        if(sceneList.get(curScene).ResultsM[0].equals(""))
+        {
+          text("you cannot go this way" ,width/4, height/11, 11*width/16, height/5);
+        }else
+        {
+          if(monkeyPacified)
+          {
+            text(sceneList.get(curScene).EndText ,width/4, height/11, 11*width/16, height/5);
+            curScene++;
+          }else
+          {
+            text(sceneList.get(curScene).ResultsM[0] ,width/4, height/11, 11*width/16, height/5);
+          }
+          
+        }
+      }
+    }else if(left){
+      if(speak)
+      {
+        text(sceneList.get(curScene).ResultsS[1] ,width/4, height/11, 11*width/16, height/5);
+      }else if(fight)
+      {
+        text(sceneList.get(curScene).ResultsF[1] ,width/4, height/11, 11*width/16, height/5);
+      }else if(move){
+        if(sceneList.get(curScene).ResultsM[1].equals(""))
+        {
+          text("you cannot go this way" ,width/4, height/11, 11*width/16, height/5);
+        }else
+        {
+          text(sceneList.get(curScene).ResultsM[1] ,width/4, height/11, 11*width/16, height/5);
+        }
+      }
+    }else if(down){
+      if(speak)
+      {
+        text(sceneList.get(curScene).ResultsS[2] ,width/4, height/11, 11*width/16, height/5);
+      }else if(fight)
+      {
+        text(sceneList.get(curScene).ResultsF[2] ,width/4, height/11, 11*width/16, height/5);
+      }else if(move){
+        if(sceneList.get(curScene).ResultsM[2].equals(""))
+        {
+          text("you cannot go this way" ,width/4, height/11, 11*width/16, height/5);
+        }else
+        {
+          text(sceneList.get(curScene).ResultsM[2] ,width/4, height/11, 11*width/16, height/5);
+        }
+      }
+    }else if(right){
+      if(speak)
+      {
+        text(sceneList.get(curScene).ResultsS[3] ,width/4, height/11, 11*width/16, height/5);
+        if(curScene == 0)
+        {
+          monkeyPacified = true;
+        }
+      }else if(fight)
+      {
+        text(sceneList.get(curScene).ResultsF[3] ,width/4, height/11, 11*width/16, height/5);
+      }else if(move){
+        if(sceneList.get(curScene).ResultsM[3].equals(""))
+        {
+          text("you cannot go this way" ,width/4, height/11, 11*width/16, height/5);
+        }else
+        {
+          text(sceneList.get(curScene).ResultsM[3] ,width/4, height/11, 11*width/16, height/5);
+        }
+      }
+    }
+  }
+    
   imageMode(CENTER);
   if(speak)
   {
@@ -36,7 +145,7 @@ void gameDraw()
   {
     DisplayOptions("fight");
     image(fightButton, width/2, 21*height/32);
-  }else if(travel)
+  }else if(move)
   {
     DisplayOptions("move");
     image(moveButton, width/2, 21*height/32);
@@ -49,74 +158,47 @@ void gameDraw()
 void DisplayOptions(String action)
 {
   rectMode(CENTER);
+  fill(25);
   rect(width/2, 6*height/16, width/2, height/6);
   rect(width/2, 15*height/16, width/2, height/6);
   rect(26*width/30, 21*height/32, width/3, height/5);
   rect(4*width/30, 21*height/32, width/3, height/5);
-  
-  textAlign(CORNER);
-  fill(250, 185, 249);
-  text("You encounter a monkey. It looks at you with curiosity." ,width/4, height/11);
   textAlign(CENTER);
   if(action.equals("speak"))
   {
   fill(189, 252, 241);
-  text("Give B A N A N A." ,width/2, 6*height/16);
-  text("Imitate the monkey" ,width/2, 15*height/16);
-  text("Ask for directions" ,26*width/30, 21*height/32);
-  text("Indoctrinate into Christianity" ,4*width/30, 21*height/32);
+  text(sceneList.get(curScene).OptionsS[0] ,width/2, 6*height/16); //top
+  text(sceneList.get(curScene).OptionsS[1] ,4*width/30, 21*height/32); //left
+  text(sceneList.get(curScene).OptionsS[2] ,width/2, 15*height/16); //bottom
+  text(sceneList.get(curScene).OptionsS[3] ,26*width/30, 21*height/32); //right
   
-  if(up){
-    fill(255,0,0);
-    textAlign(CORNER);
-    text("Give B A N A N A has been chosen!", width/4, height/8);
-  }else if(down)
-  {
-    fill(255,0,0);
-    textAlign(CORNER);
-    text("Imitate the monkey has been chosen!", width/4, height/8);
-  }else if(left)
-  {
-    fill(255,0,0);
-    textAlign(CORNER);
-    text("Indoctrinate into Christianity has been chosen!", width/4, height/8);
-  }else if(right)
-  {
-    fill(255,0,0);
-    textAlign(CORNER);
-    text("Ask for directions has been chosen!", width/4, height/8);
-  }
+    if((up || left || down || right)&& !OnCooldown ){
+      OnCooldown= true;
+    }
   }else if(action.equals("fight"))
   {
     textAlign(CENTER);
     fill(252, 149, 141);
-    text("Throw a rock" ,width/2, 6*height/16);
-    text("Put in a chokehold" ,width/2, 15*height/16);
-    text("Punch" ,26*width/30, 21*height/32);
-    text("Kick" ,4*width/30, 21*height/32);
+    text(sceneList.get(curScene).OptionsF[0] ,width/2, 6*height/16); //top
+    text(sceneList.get(curScene).OptionsF[1] ,4*width/30, 21*height/32); //left
+    text(sceneList.get(curScene).OptionsF[2] ,width/2, 15*height/16); //bottom
+    text(sceneList.get(curScene).OptionsF[3] ,26*width/30, 21*height/32); //right
     
+    if((up || left || down || right)&& !OnCooldown ){
+      OnCooldown= true;
+    }
+  }else if(action.equals("move"))
+  {
+    textAlign(CENTER);
+    fill(252, 149, 141);
+    text(sceneList.get(curScene).OptionsM[0] ,width/2, 6*height/16); //top
+    text(sceneList.get(curScene).OptionsM[1] ,4*width/30, 21*height/32); //left
+    text(sceneList.get(curScene).OptionsM[2] ,width/2, 15*height/16); //bottom
+    text(sceneList.get(curScene).OptionsM[3] ,26*width/30, 21*height/32); //right
     
-    if(up){
-    fill(255,0,0);
-    textAlign(CORNER);
-    text("Throw a rock has been chosen!", width/4, height/8);
-  }else if(down)
-  {
-    fill(255,0,0);
-    textAlign(CORNER);
-    text("Put in a chokehold has been chosen!", width/4, height/8);
-  }else if(left)
-  {
-    fill(255,0,0);
-    textAlign(CORNER);
-    text("Kick has been chosen!", width/4, height/8);
-  }else if(right)
-  {
-    fill(255,0,0);
-    textAlign(CORNER);
-    text("Ounch has been chosen!", width/4, height/8);
-  }
-    
+    if((up || left || down || right)&& !OnCooldown ){
+      OnCooldown= true;
+    }
   }
 }
 
@@ -133,15 +215,23 @@ void DisplayGUI()
 class Scene
 {
   ArrayList<Boolean> unlockCons = new ArrayList<Boolean>();
-  
-  Scene()
+  String OptionsM[], OptionsF[], OptionsS[];
+  String StrtText, EndText;
+  String ResultsM[], ResultsF[], ResultsS[];
+  Scene(String optionsM[],String optionsF[],String optionsS[], String strtText) //sets up options
   {
-    
-    
+    OptionsM = optionsM;
+    OptionsF = optionsF;
+    OptionsS = optionsS;
+    StrtText = strtText;
   }
-  Scene(String sceneSetter)
+  
+  void AddResults(String resultsM[],String resultsF[],String resultsS[], String endText)
   {
-    
+    ResultsM = resultsM;
+    ResultsF = resultsF;
+    ResultsS = resultsS;
+    EndText = endText;
     
   }
   
