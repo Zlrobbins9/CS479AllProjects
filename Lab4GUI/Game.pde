@@ -58,18 +58,66 @@ void DisplayOptions(String action)
   fill(250, 185, 249);
   text("You encounter a monkey. It looks at you with curiosity." ,width/4, height/11);
   textAlign(CENTER);
-  /*
+  if(action.equals("speak"))
+  {
   fill(189, 252, 241);
   text("Give B A N A N A." ,width/2, 6*height/16);
   text("Imitate the monkey" ,width/2, 15*height/16);
   text("Ask for directions" ,26*width/30, 21*height/32);
   text("Indoctrinate into Christianity" ,4*width/30, 21*height/32);
-  */
-  fill(252, 149, 141);
-  text("Throw a rock" ,width/2, 6*height/16);
-  text("Put in a chokehold" ,width/2, 15*height/16);
-  text("Punch" ,26*width/30, 21*height/32);
-  text("Kick" ,4*width/30, 21*height/32);
+  
+  if(up){
+    fill(255,0,0);
+    textAlign(CORNER);
+    text("Give B A N A N A has been chosen!", width/4, height/8);
+  }else if(down)
+  {
+    fill(255,0,0);
+    textAlign(CORNER);
+    text("Imitate the monkey has been chosen!", width/4, height/8);
+  }else if(left)
+  {
+    fill(255,0,0);
+    textAlign(CORNER);
+    text("Indoctrinate into Christianity has been chosen!", width/4, height/8);
+  }else if(right)
+  {
+    fill(255,0,0);
+    textAlign(CORNER);
+    text("Ask for directions has been chosen!", width/4, height/8);
+  }
+  }else if(action.equals("fight"))
+  {
+    textAlign(CENTER);
+    fill(252, 149, 141);
+    text("Throw a rock" ,width/2, 6*height/16);
+    text("Put in a chokehold" ,width/2, 15*height/16);
+    text("Punch" ,26*width/30, 21*height/32);
+    text("Kick" ,4*width/30, 21*height/32);
+    
+    
+    if(up){
+    fill(255,0,0);
+    textAlign(CORNER);
+    text("Throw a rock has been chosen!", width/4, height/8);
+  }else if(down)
+  {
+    fill(255,0,0);
+    textAlign(CORNER);
+    text("Put in a chokehold has been chosen!", width/4, height/8);
+  }else if(left)
+  {
+    fill(255,0,0);
+    textAlign(CORNER);
+    text("Kick has been chosen!", width/4, height/8);
+  }else if(right)
+  {
+    fill(255,0,0);
+    textAlign(CORNER);
+    text("Ounch has been chosen!", width/4, height/8);
+  }
+    
+  }
 }
 
 void DisplayGUI()

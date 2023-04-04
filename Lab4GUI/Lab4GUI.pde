@@ -24,10 +24,11 @@ void setup() {
   gameSetup();
   String portName = "COM5"; //changer
   delay(1000);
-  //myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
+  /*
+  myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
   
-  //myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
-  //test_setup();
+  myPort.bufferUntil('\n');  // don't generate a serialEvent() unless you get a newline character:
+  */
 }
 
 void draw() {
@@ -47,58 +48,61 @@ void draw() {
 
 void serialEvent(Serial myPort) {
   String tempVal = myPort.readStringUntil('\n');
+  if(tempVal == null){
+    return;
+  }
   println("tempval is:" + tempVal );
   tempVal = tempVal.trim();
   switch(tempVal)
   {
-    case "0 touched":
+    case "3 touched":
      up = true;
      println("0 recognized");
     break;
-    case "0 released":
+    case "3 released":
       up = false;
     break;
     
-    case "1 touched":
+    case "4 touched":
      left = true;
     break;
-    case "1 released":
+    case "4 released":
       left = false;
     break;
     
-    case "2 touched":
+    case "5 touched":
       down = true;
     break;
-    case "2 released":
+    case "5 released":
       down = false;
     break;
     
-    case "3 touched":
+    case "6 touched":
       right = true;
     break;
-    case "3 released":
+    case "6 released":
       right = false;
     break;
     
     
-    case "4 touched":
+    case "1 touched":
      speak = true;
     break;
-    case "4 released":
+    case "1 released":
       speak = false;
     break;
     
-    case "5 touched":
+    case "0 touched":
       fight = true;
     break;
-    case "5 released":
+    case "0 released":
       fight = false;
     break;
     
-    case "6 touched":
+    case "2 touched":
       travel = true;
     break;
-    case "6 released":
+    case "2 released":
       travel = false;
     break;
     
