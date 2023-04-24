@@ -87,7 +87,7 @@ void loop() {
       Serial.print(mpu6050.getAngleZ());Serial.print(", ");
    
     Serial.print(body.heartRate);Serial.print(", ");
-    Serial.println(analogRead(A1));
+    Serial.println(analogRead(A1)); // pressure sensor
 
     
    // Serial.println("=======================================================\n");

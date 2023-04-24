@@ -6,13 +6,5 @@ void introDraw()
   textSize(40);
   textAlign(CENTER);
     image(intro,0,0);
-
-  
-  if(up && down)
-  {
-      tab = "game";
-      up = false;
-      down = false;
-  }
   
 }

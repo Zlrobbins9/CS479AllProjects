@@ -6,70 +6,8 @@ void keyPressed() {
       tab = "game";
       }else
       {
-        OnCooldown = false;
-        up=false; down = false; left = false;right = false; move = false; fight = false; speak = false;
-      }
-      break;
-      
-      case 'w':
-      if(!OnCooldown)
-      up = true;
-      
-      break;
-      
-      case 'a':
-      if(!OnCooldown)
-      left = true;
-      break;
-      
-      case 's':
-      if(!OnCooldown)
-      down = true;
-      break;
-      
-      case 'd':
-      if(!OnCooldown)
-      right = true;
-      break;
-      
-      
-      case 'p':
-      if(!OnCooldown)
-      speak = true;
-      break;
-      
-      case 'l':
-      if(!OnCooldown)
-      fight = true;
-      break;
-      
-      case 'm':
-      if(!OnCooldown)
-      move = true;
-      break;
-  }
-}
 
-void keyReleased()
-{
-  switch (key) {
-    case 'i':
-      tab = "intro";
-      break;
-      
-      case 'p':
-      if(!OnCooldown)
-      speak = false;
-      break;
-      
-      case 'l':
-      if(!OnCooldown)
-      fight = false;
-      break;
-      
-      case 'm':
-      if(!OnCooldown)
-      move = false;
+      }
       break;
   }
   
@@ -77,82 +15,42 @@ void keyReleased()
 
 void serialEvent(Serial myPort) {
   String tempVal = myPort.readStringUntil('\n');
+  
   if(tempVal == null){
     return;
   }
-  println("tempval is:" + tempVal );
   tempVal = tempVal.trim();
-  switch(tempVal)
-  {
-    case "3 touched":
-    if(!OnCooldown)
-     up = true;
-    break;
-    case "3 released":
-    if(!OnCooldown)
-      up = false;
-    break;
+  println("tempval is:" + tempVal + "<----" );
+  
+    if(sensorConfigured){
+      String inputs[] = split(tempVal, ",");
+      
+      for(int i=0; i < inputs.length; i++){
+        inputs[i] = inputs[i].trim();
+          println("the value at index " + i + " is-->" + inputs[i]);
+      }
+      accel[0] = float(inputs[0]); //curPressure = float(inputs[1]);
+      accel[1] = float(inputs[1]);
+      accel[2] = float(inputs[2]);
+      gyro[0] = float(inputs[3]);
+      gyro[1] = float(inputs[4]);
+      gyro[2] = float(inputs[5]);
+      accelAngle[0] = float(inputs[6]);
+      accelAngle[1] = float(inputs[7]);
+      gyroAngle[0] = float(inputs[8]); //curPressure = float(inputs[1]);
+      gyroAngle[1] = float(inputs[9]);
+      gyroAngle[2] = float(inputs[10]);
+      angle[0] = float(inputs[11]);
+      angle[1] = float(inputs[12]);
+      angle[2] = float(inputs[13]);
+      HR = float(inputs[14]);
+      buttonPressure = float(inputs[15]);
+    }
     
-    case "4 touched":
-    if(!OnCooldown)
-     left = true;
-    break;
-    case "4 released":
-    if(!OnCooldown)
-      left = false;
-    break;
-    
-    case "5 touched":
-    if(!OnCooldown)
-      down = true;
-    break;
-    case "5 released":
-    if(!OnCooldown)
-      down = false;
-    break;
-    
-    case "6 touched":
-    if(!OnCooldown)
-      right = true;
-    break;
-    case "6 released":
-    if(!OnCooldown)
-      right = false;
-    break;
-    
-    
-    case "1 touched":
-    if(!OnCooldown)
-     speak = true;
-    break;
-    case "1 released":
-    if(!OnCooldown)
-      speak = false;
-    break;
-    
-    case "0 touched":
-    if(!OnCooldown)
-      fight = true;
-    break;
-    case "0 released":
-    if(!OnCooldown)
-      fight = false;
-    break;
-    
-    case "2 touched":
-    if(!OnCooldown)
-      move = true;
-    break;
-    case "2 released":
-    if(!OnCooldown)
-      move = false;
-    break;
-    
-    
-    default:
-    println("no input :(");
-    break;
-  }
+    if(tempVal.equals("========================================Sensor configured.")){
+      sensorConfigured = true;
+      println("configuration complete! taking in values...");
+    }
   }
 
 void mousePressed()
