@@ -24,9 +24,6 @@ void setup() {
     println(Serial.list()[i]);
   }
   */
-  
-  intro = loadImage("Title.jpg");
-  intro.resize(width, height);
   String portName = "COM5"; //changer
   delay(1000);
   myPort = new Serial(this, portName, 115200);  // Open whatever port is the one you're using.
