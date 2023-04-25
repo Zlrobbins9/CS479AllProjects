@@ -20,14 +20,14 @@ void serialEvent(Serial myPort) {
     return;
   }
   tempVal = tempVal.trim();
-  println("tempval is:" + tempVal + "<----" );
+  //println("tempval is:" + tempVal + "<----" );
   
     if(sensorConfigured){
       String inputs[] = split(tempVal, ",");
       
       for(int i=0; i < inputs.length; i++){
         inputs[i] = inputs[i].trim();
-          println("the value at index " + i + " is-->" + inputs[i]);
+         // println("the value at index " + i + " is-->" + inputs[i]);
       }
       accel[0] = float(inputs[0]); //curPressure = float(inputs[1]);
       accel[1] = float(inputs[1]);
@@ -47,7 +47,7 @@ void serialEvent(Serial myPort) {
       buttonPressure = float(inputs[15]);
     }
     
-    if(tempVal.equals("========================================Sensor configured.")){
+    if(tempVal.equals("Sensor successful, begin with regular inputs.")){
       sensorConfigured = true;
       println("configuration complete! taking in values...");
     }

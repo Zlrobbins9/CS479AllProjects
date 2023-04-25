@@ -26,6 +26,7 @@ void setup() {
    int error = bioHub.configBpm(MODE_ONE);
    if(error == 0){ // Zero errors!
     Serial.println("Sensor configured.");
+    Serial.println("Sensor successful, begin with regular inputs.");
   }
   else {
     Serial.println("Error configuring sensor.");
@@ -37,28 +38,60 @@ void loop() {
   mpu6050.update();
   body = bioHub.readBpm();
   if(Serial.available()>0){
-    String incoming = Serial.readString();
-    char test = incoming[0];
+    char incoming = Serial.read();
+    char test = incoming;
    // int numIncoming = 
     //Serial.print(test);
     if(test == '1'){
-      digitalWrite(LED_PIN1,HIGH);
-      delay(1000);
-      digitalWrite(LED_PIN1,LOW);
+
+      for(int i=0; i < 5; i++){
+        digitalWrite(LED_PIN1,HIGH);
+        delay(400);
+        digitalWrite(LED_PIN1,LOW);
+        digitalWrite(LED_PIN2,HIGH);
+        delay(400);
+        digitalWrite(LED_PIN2,LOW);
+        digitalWrite(LED_PIN3,HIGH);
+        delay(400);
+        digitalWrite(LED_PIN3,LOW);
+        delay(800);
+      }
+      // digitalWrite(LED_PIN1,HIGH);
+      // digitalWrite(LED_PIN3,LOW);
+      // digitalWrite(LED_PIN2,LOW);
+      //delay(10);
+      //digitalWrite(LED_PIN1,LOW);
 
     }
     else if(test == '2'){
-      digitalWrite(LED_PIN2,HIGH);
-      delay(1000);
-      digitalWrite(LED_PIN2,LOW);
+      for(int i=0; i < 5; i++){
+        digitalWrite(LED_PIN3,HIGH);
+        delay(400);
+        digitalWrite(LED_PIN3,LOW);
+        digitalWrite(LED_PIN1,HIGH);
+        delay(400);
+        digitalWrite(LED_PIN1,LOW);
+        digitalWrite(LED_PIN3,HIGH);
+        delay(400);
+        digitalWrite(LED_PIN3,LOW);
+        delay(800);
+      }
+      //delay(10);
+      //digitalWrite(LED_PIN2,LOW);
     }
     else if(test == '3'){
       digitalWrite(LED_PIN3,HIGH);
-      delay(1000);
-      digitalWrite(LED_PIN3,LOW);
+      digitalWrite(LED_PIN2,LOW);
+      digitalWrite(LED_PIN1,LOW);
+      //delay(10);
+      //digitalWrite(LED_PIN3,LOW);
     }
     else if(test == '4'){
       tone(BUZZER,2500,1000);
+    }else if(test == '5'){
+      digitalWrite(LED_PIN3,LOW);
+      digitalWrite(LED_PIN2,LOW);
+      digitalWrite(LED_PIN1,LOW);
     }
     
   }

@@ -7,13 +7,11 @@ float[] accel, gyro, gyroAngle, accelAngle, angle;
 String tab = "intro";
 boolean sensorConfigured = false;
 float HR = 0, buttonPressure = 0;
-float x,y;
+
 
 void setup() {
   fullScreen();
-  x = width/2;
-  y = height/2;
-  
+  gameSetup();
   accel = new float[3];
   gyro = new float[3];
   accelAngle = new float[2];
@@ -43,8 +41,10 @@ void draw() {
     introDraw();
     break;
     case "game":
-    
+      gameDraw();
     break;
+    case "lose":
+      loseDraw();
   }
   
   
